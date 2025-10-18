@@ -24,7 +24,19 @@ module layer_between_project_and_lab_top
 
     //------------------------------------------------------------------------
 
-    localparam clk_mhz = 25;
+    localparam clk_mhz       = 25;
+               w_key         = 8,
+               w_sw          = 8,
+               w_led         = 8,
+               w_digit       = 8,
+               w_gpio        = 1,
+
+               screen_width  = 640,
+               screen_height = 480,
+
+               w_red         = 2,
+               w_green       = 2,
+               w_blue        = 2;
 
     // TODO: Think how to use this signal for self-diagnostics
     assign sticky_failure = 1'b0;
