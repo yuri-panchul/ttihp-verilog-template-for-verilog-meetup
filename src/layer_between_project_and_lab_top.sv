@@ -1,6 +1,6 @@
 `include "swap_bits.svh"
 
-module layer_between_project_and_hackathon_top
+module layer_between_project_and_lab_top
 (
     input              clock,
     input              reset,
@@ -52,7 +52,7 @@ module layer_between_project_and_hackathon_top
 
     //------------------------------------------------------------------------
 
-    hackathon_top i_hackathon_top (.*);
+    lab_top i_lab_top (.*);
 
     //------------------------------------------------------------------------
 
