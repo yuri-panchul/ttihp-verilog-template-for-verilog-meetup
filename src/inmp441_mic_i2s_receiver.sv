@@ -25,7 +25,7 @@ module inmp441_mic_i2s_receiver
     generate
         if (clk_mhz == 100)
         begin : clk_100
-            always_ff @ (posedge clk or posedge rst)
+            always_ff @ (posedge clk)
                 if (rst)
                     clk_en <= '0;
                 else
@@ -41,7 +41,7 @@ module inmp441_mic_i2s_receiver
 
     logic [8:0] cnt;
 
-    always_ff @ (posedge clk or posedge rst)
+    always_ff @ (posedge clk)
         if (rst)
             cnt <= '0;
         else if (clk_en)
@@ -51,7 +51,7 @@ module inmp441_mic_i2s_receiver
 
     assign sck = cnt [3];                // 50 MHz / 16   = 3.13 MHz
 
-    always_ff @ (posedge clk or posedge rst)
+    always_ff @ (posedge clk)
         if (rst)
             ws <= 1'b1;
         else if (clk_en & cnt == 9'd15)  // 50 MHz / 1024 = 48.8  KHz
@@ -70,7 +70,7 @@ module inmp441_mic_i2s_receiver
 
     logic [23:0] shift;
 
-    always_ff @ (posedge clk or posedge rst)
+    always_ff @ (posedge clk)
         if (rst)
         begin
             shift <= '0;
