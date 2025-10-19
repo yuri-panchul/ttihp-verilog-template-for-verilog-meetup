@@ -102,10 +102,7 @@ module layer_between_project_and_lab_top
 
         .w_red         ( w_red         ),
         .w_green       ( w_green       ),
-        .w_blue        ( w_blue        ),
-
-        .screen_width  ( screen_width  ),
-        .screen_height ( screen_height )
+        .w_blue        ( w_blue        )
     )
     i_lab_top (.*);
 
