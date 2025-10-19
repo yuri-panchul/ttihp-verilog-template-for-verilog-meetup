@@ -96,7 +96,7 @@ module lab_top
         if (cnt2 == '0 | cnt2 == w_y' (screen_height - 1))
             cnt2_d = w_y' (screen_height / 2);
         else
-            cnt2_d = cnt2 + key [0] - (| key [w_key - 1:1]);
+            cnt2_d = cnt2 + key [0] - w_y' (| key [w_key - 1:1]);
 
         red   = '0;
         green = '0;

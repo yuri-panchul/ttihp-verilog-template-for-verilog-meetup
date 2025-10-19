@@ -12,7 +12,6 @@ lint_off -rule UNUSEDSIGNAL -file "*/tm1638_board.sv" -match "*'tm_out'[7:5,3:1]
 
 // The msb-s of the vpos and hpos are not used
 lint_off -rule UNUSEDSIGNAL -file "*/layer_between_project_and_lab_top.sv" -match "*'hpos'[9]"
-lint_off -rule UNUSEDSIGNAL -file "*/layer_between_project_and_lab_top.sv" -match "*'vpos'[9]"
 
 // The msb-s of the key are not used.
 lint_off -rule UNUSEDSIGNAL -file "*/lab_top.sv" -match "*'key'[7:2]"
