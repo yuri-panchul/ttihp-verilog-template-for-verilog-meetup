@@ -144,6 +144,8 @@ module layer_between_project_and_lab_top
     wire [9:0] hpos; assign x = w_x' (hpos);
     wire [9:0] vpos; assign y = w_y' (vpos);
 
+    wire pixel_clk;  // Unused because main clock is 25 MHz
+
     vga
     # (
         .CLK_MHZ     ( clk_mhz   ),
@@ -162,7 +164,7 @@ module layer_between_project_and_lab_top
         .hpos        ,
         .vpos        ,
 
-        .pixel_clk   (          )  // Unused because main clock is 25 MHz
+        .pixel_clk
     );
 
     //------------------------------------------------------------------------
