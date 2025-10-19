@@ -18,11 +18,13 @@ It is used in BGM project as an add-on for FPGA boards that have insufficient nu
 3. Adds glue logic to make the design compatible with [Tiny VGA](https://github.com/mole99/tiny-vga)
 used in [TT10 Demoscene](https://tinytapeout.com/competitions/demoscene-ttihp/) projects.
 
-4. Adds some code to bypass Python-based cocotb testbench and do all verification in SystemVerilog.
+4. Instantiates and adds glue logic for the [controller of the I2S interface for the INMP441 microphone](https://github.com/yuri-panchul/basics-graphics-music/blob/main/peripherals/inmp441_mic_i2s_receiver.sv).
 
-5. Adds hooks to the documentation and other text files to make use of the template easier. Just grep for `TODO`.
+5. Adds some code to bypass Python-based cocotb testbench and do all verification in SystemVerilog.
 
-Below is the original text from Tiny Tapeout website.
+6. Adds hooks to the documentation and other text files to make use of the template easier. Just grep for `TODO`.
+
+Below is the original text from the Tiny Tapeout GitHub repository.
 
 # Tiny Tapeout Verilog Project Template
 
