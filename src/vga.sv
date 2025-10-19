@@ -56,10 +56,10 @@ module vga
     begin
         if (hpos == H_MAX)
         begin
-            d_hpos = 1'd0;
+            d_hpos = '0;
 
             if (vpos == V_MAX)
-                d_vpos = 1'd0;
+                d_vpos = '0;
             else
                 d_vpos = vpos + 1'd1;
         end
