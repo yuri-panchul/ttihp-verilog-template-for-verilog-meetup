@@ -198,7 +198,7 @@ module layer_between_project_and_lab_top
         .clk      ( clk     ),
         .rst      ( rst     ),
         .lr       ( mic_lr  ),
-        .ws       ( mic_wsI ),
+        .ws       ( mic_ws  ),
         .sck      ( mic_sck ),
         .sd       ( mic_sd  ),
         .value    ( mic     )
