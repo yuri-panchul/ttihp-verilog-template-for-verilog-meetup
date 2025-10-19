@@ -17,6 +17,7 @@ PROJECT_SOURCES =                         \
     tm1638_board.sv                       \
                                           \
     vga.sv                                \
+    inmp441_mic_i2s_receiver.sv           \
                                           \
     layer_between_project_and_lab_top.sv  \
     project.v                             \
