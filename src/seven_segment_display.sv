@@ -51,21 +51,18 @@ module seven_segment_display
 
     logic [w_cnt - 1:0] cnt;
 
-
     always_ff @ (posedge clk)
         if (rst)
             cnt <= '0;
-        else if (cnt == cnt_max)
+        else if (cnt == w_cnt' (cnt_max))
             cnt <= '0;
         else
             cnt <= cnt + 1'd1;
 
-
     // Update display output register with specified frequency
 
     logic  [w_digit * 4 - 1:0] r_number;
-    wire enable = cnt == cnt_max;
-
+    wire enable = (cnt == w_cnt' (cnt_max));
 
     always_ff @ (posedge clk)
         if (rst)
@@ -73,10 +70,8 @@ module seven_segment_display
         else if (enable)
             r_number <= number;
 
-
     localparam w_index = $clog2 (w_digit);
     logic [w_index - 1:0] index;
-
 
     always_ff @ (posedge clk)
         if (rst)
@@ -86,7 +81,7 @@ module seven_segment_display
                 w_index' (0) : index + 1'd1);
 
     // Outputs are combinational like before
-    assign abcdefgh = dig_to_seg (r_number [index * 4 +: 4]) ^ dots [index];
+    assign abcdefgh = dig_to_seg (r_number [index * 4 +: 4]) ^ 8' (dots [index]);
     assign digit    = w_digit' (1'b1) << index;
 
 endmodule

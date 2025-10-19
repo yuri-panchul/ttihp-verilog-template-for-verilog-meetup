@@ -81,20 +81,20 @@ module vga
     begin
         if (rst)
         begin
-            clk_en_cnt <= 3'b0;
-            clk_en <= 1'b0;
+            clk_en_cnt <= '0;
+            clk_en     <= 1'b0;
         end
         else
         begin
-            if (clk_en_cnt == (CLK_MHZ / PIXEL_MHZ) - 1)
+            if (clk_en_cnt == 4' ((CLK_MHZ / PIXEL_MHZ) - 1))
             begin
-                clk_en_cnt <= 3'b0;
-                clk_en <= 1'b1;
+                clk_en_cnt <= '0;
+                clk_en     <= 1'b1;
             end
             else
             begin
-                clk_en_cnt <= clk_en_cnt + 1;
-                clk_en <= 1'b0;
+                clk_en_cnt <= clk_en_cnt + 1'd1;
+                clk_en     <= 1'b0;
             end
         end
     end
@@ -108,8 +108,8 @@ module vga
             hsync       <= 1'b0;
             vsync       <= 1'b0;
             display_on  <= 1'b0;
-            hpos        <= 1'b0;
-            vpos        <= 1'b0;
+            hpos        <= '0;
+            vpos        <= '0;
         end
         else if (clk_en)
         begin
