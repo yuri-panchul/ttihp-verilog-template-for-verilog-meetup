@@ -1,70 +1,117 @@
 `include "swap_bits.svh"
 
 module layer_between_project_and_lab_top
+# (
+    parameter clk_mhz       = 25,
+              pixel_mhz     = 25,
+
+              w_key         = 8,
+              w_sw          = 7,
+              w_led         = 8,
+              w_digit       = 8,
+              w_gpio        = 1,  // unused
+
+              screen_width  = 640,
+              screen_height = 480,
+
+              w_red         = 2,
+              w_green       = 2,
+              w_blue        = 2;
+
+              screen_width  = 640,
+              screen_height = 480,
+
+              w_x           = $clog2 ( screen_width  ),
+              w_y           = $clog2 ( screen_height )
+)
 (
-    input              clock,
-    input              reset,
+    input                        clk,
+    input                        rst,
 
-    output             tm1638_clk,
-    output             tm1638_stb,
+    input        [w_sw    - 1:0] sw,
 
-    input              tm1638_dio_in,
-    output             tm1638_dio_out,
-    output             tm1638_dio_out_en,
+    output                       tm1638_clk,
+    output                       tm1638_stb,
 
-    output logic       vga_hsync,
-    output logic       vga_vsync,
+    input                        tm1638_dio_in,
+    output                       tm1638_dio_out,
+    output                       tm1638_dio_out_en,
 
-    output logic [1:0] vga_red,
-    output logic [1:0] vga_green,
-    output logic [1:0] vga_blue,
+    output logic                 vga_hsync,
+    output logic                 vga_vsync,
 
-    output             sticky_failure
+    output logic [w_red   - 1:0] vga_red,
+    output logic [w_green - 1:0] vga_green,
+    output logic [w_blue  - 1:0] vga_blue,
+
+    output                       mic_lr,
+    output                       mic_ws,
+    output                       mic_sck,
+    input                        mic_sd,
+
+    input                        uart_rx,
+
+    output                       sticky_failure
 );
 
     //------------------------------------------------------------------------
 
-    localparam clk_mhz       = 25;
-               w_key         = 8,
-               w_sw          = 8,
-               w_led         = 8,
-               w_digit       = 8,
-               w_gpio        = 1,
+    wire slow_clk = clk;
 
-               screen_width  = 640,
-               screen_height = 480,
+    // Keys, switches, LEDs
 
-               w_red         = 2,
-               w_green       = 2,
-               w_blue        = 2;
-
-    // TODO: Think how to use this signal for self-diagnostics
-    assign sticky_failure = 1'b0;
-
-    //------------------------------------------------------------------------
-
-    wire slow_clock = clock;
-
-    wire [7:0] key;
-    wire [7:0] led;
+    wire [w_key   - 1:0] key;
+    wire [w_led   - 1:0] led;
 
     // A dynamic seven-segment display
 
-    wire [7:0] abcdefgh;
-    wire [7:0] digit;
+    wire [          7:0] abcdefgh;
+    wire [w_digit - 1:0] digit;
 
-    // LCD screen interface
+    // Graphics
 
-    wire [8:0] x;
-    wire [8:0] y;
+    wire [w_x     - 1:0] x;
+    wire [w_y     - 1:0] y;
 
-    wire [4:0] red;
-    wire [5:0] green;
-    wire [4:0] blue;
+    wire [w_red   - 1:0] red;
+    wire [w_green - 1:0] green;
+    wire [w_blue  - 1:0] blue;
+
+    // Microphone, sound output and UART
+
+    wire [         23:0] mic;
+    wire [         15:0] sound;
+
+    wire                 uart_rx;
+    wire                 uart_tx;
+
+    // General-purpose Input/Output
+
+    wire [w_gpio  - 1:0] gpio;
 
     //------------------------------------------------------------------------
 
-    lab_top i_lab_top (.*);
+    lab_top
+    # (
+        .clk_mhz       ( clk_mhz       ),
+
+        .w_key         ( w_key         ),
+        .w_sw          ( w_sw          ),
+        .w_led         ( w_led         ),
+        .w_digit       ( w_digit       ),
+        .w_gpio        ( w_gpio        ),
+
+        .screen_width  ( screen_width  ),
+        .screen_height ( screen_height ),
+
+        .w_red         ( w_red         ),
+        .w_green       ( w_green       ),
+        .w_blue        ( w_blue        ),
+
+        .screen_width  ( screen_width  ),
+        .screen_height ( screen_height )
+    )
+    i_lab_top (.*);
 
     //------------------------------------------------------------------------
 
@@ -74,13 +121,13 @@ module layer_between_project_and_lab_top
     tm1638_board_controller
     # (
         .clk_mhz          ( clk_mhz           ),
-        .w_digit          ( 8                 ),
+        .w_digit          ( w_digit           ),
         .w_seg            ( 8                 )
     )
     i_tm1638
     (
-        .clk              ( clock             ),
-        .rst              ( reset             ),
+        .clk              ,
+        .rst              ,
         .hgfedcba         ,
         .digit            ,
         .ledr             ( led               ),
@@ -98,20 +145,18 @@ module layer_between_project_and_lab_top
 
     wire hsync, vsync, display_on;
 
-    wire [9:0] hpos; assign x = hpos [$left (x):0];
-    wire [9:0] vpos; assign y = vpos [$left (y):0];
-
-    wire pixel_clk;  // Unused because main clock is 25 MHz
+    wire [9:0] hpos; assign x = w_x' (hpos);
+    wire [9:0] vpos; assign y = w_y' (vpos);
 
     vga
     # (
-        .CLK_MHZ     ( clk_mhz ),
-        .PIXEL_MHZ   ( clk_mhz )
+        .CLK_MHZ     ( clk_mhz   ),
+        .PIXEL_MHZ   ( pixel_mhz )
     )
     i_vga
     (
-        .clk         ( clock   ),
-        .rst         ( reset   ),
+        .clk         ,
+        .rst         ,
 
         .hsync       ,
         .vsync       ,
@@ -121,13 +166,13 @@ module layer_between_project_and_lab_top
         .hpos        ,
         .vpos        ,
 
-        .pixel_clk
+        .pixel_clk   (          )  // Unused because main clock is 25 MHz
     );
 
     //------------------------------------------------------------------------
 
-    always_ff @ (posedge clock)
-        if (reset)
+    always_ff @ (posedge clk)
+        if (rst)
         begin
             vga_hsync <= 1'b0;
             vga_vsync <= 1'b0;
@@ -140,16 +185,33 @@ module layer_between_project_and_lab_top
 
     //------------------------------------------------------------------------
 
-    `define REDUCE_COLOR_TO_2_BITS(c)  \
-        (display_on ? { c [$left (c)], | c [$left (c) - 1:0] } : '0)
-
-    always_ff @ (posedge clock)
+    always_ff @ (posedge clk)
     begin
-        vga_red   <= `REDUCE_COLOR_TO_2_BITS ( red   );
-        vga_green <= `REDUCE_COLOR_TO_2_BITS ( green );
-        vga_blue  <= `REDUCE_COLOR_TO_2_BITS ( blue  );
+        vga_red   <= display_on ? red   : '0;
+        vga_green <= display_on ? green : '0;
+        vga_blue  <= display_on ? blue  : '0;
     end
 
-    `undef REDUCE_COLOR_TO_2_BITS
+    //------------------------------------------------------------------------
+
+    inmp441_mic_i2s_receiver
+    # (
+        .clk_mhz  ( clk_mhz )
+    )
+    i_microphone
+    (
+        .clk      ( clk     ),
+        .rst      ( rst     ),
+        .lr       ( mic_lr  ),
+        .ws       ( mic_wsI ),
+        .sck      ( mic_sck ),
+        .sd       ( mic_sd  ),
+        .value    ( mic     )
+    );
+
+    //------------------------------------------------------------------------
+
+    // TODO: Think how to use this signal for self-diagnostics
+    assign sticky_failure = 1'b0;
 
 endmodule

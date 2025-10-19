@@ -17,12 +17,13 @@ project:
   # Source files must be in ./src and you must list each source file separately, one per line.
   # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
   source_files:
-    - "project.vlt"
     - "config.svh"
-    - "lab_top.sv"
+    - "inmp441_mic_i2s_receiver.sv"
     - "lab_specific_board_config.svh"
+    - "lab_top.sv"
     - "layer_between_project_and_lab_top.sv"
     - "project.v"
+    - "project.vlt"
     - "seven_segment_display.sv"
     - "strobe_gen.sv"
     - "swap_bits.svh"
@@ -35,14 +36,14 @@ project:
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
 pinout:
   # Inputs
-  ui[0]: ""
-  ui[1]: ""
-  ui[2]: ""
-  ui[3]: ""
-  ui[4]: ""
-  ui[5]: ""
-  ui[6]: ""
-  ui[7]: ""
+  ui[0]: "switch [0]"
+  ui[1]: "switch [1]"
+  ui[2]: "switch [2]"
+  ui[3]: "switch [3]"
+  ui[4]: "switch [4]"
+  ui[5]: "switch [5]"
+  ui[6]: "switch [6]"
+  ui[7]: "UART rx"
 
   # Outputs
   uo[0]: "VGA red [1]"
@@ -55,10 +56,10 @@ pinout:
   uo[7]: "VGA hsync"
 
   # Bidirectional pins
-  uio[0]: ""
-  uio[1]: ""
-  uio[2]: ""
-  uio[3]: ""
+  uio[0]: "INMP441 mic I2S l/r"
+  uio[1]: "INMP441 mic I2S ws"
+  uio[2]: "INMP441 mic I2S sck"
+  uio[3]: "INMP441 mic I2S sd"
   uio[4]: "output sticky_failure"
   uio[5]: "TM1638 inout dio"
   uio[6]: "TM1638 output clk"

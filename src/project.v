@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Tiny Tapeout and Verilog Meetup
+ * Copyright (c) 2024-2025 Tiny Tapeout and Verilog Meetup
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -19,6 +19,8 @@ module tt_um_verilog_meetup_template_project_TODO
 
     //------------------------------------------------------------------------
 
+    wire [6:0] sw;
+
     wire       tm1638_clk;
     wire       tm1638_stb;
 
@@ -33,14 +35,20 @@ module tt_um_verilog_meetup_template_project_TODO
     wire [1:0] vga_green;
     wire [1:0] vga_blue;
 
+    wire       mic_lr;
+    wire       mic_ws;
+    wire       mic_sck;
+    wire       mic_sd;
+
+    wire       uart_rx;
+
     wire       sticky_failure;
 
     //------------------------------------------------------------------------
 
     layer_between_project_and_lab_top i_layer
     (
-        .clock (   clk   ),
-        .reset ( ~ rst_n ),
+        .rst ( ~ rst_n ),
         .*
     );
 
@@ -48,20 +56,32 @@ module tt_um_verilog_meetup_template_project_TODO
 
     // All output pins must be assigned. If not used, assign to 0.
 
-    assign uio_out [7]    = tm1638_stb;
-    assign uio_out [6]    = tm1638_clk;
+    assign sw             = ui_in [6:0];
+    assign uart_rx        = ui_in [7];
+
+    //------------------------------------------------------------------------
+
+    assign uio_oe  [2:0]  = '1;
+
+    assign uio_out [0]    = mic_lr;
+    assign uio_out [1]    = mic_ws;
+    assign uio_out [2]    = mic_sck;
+
+    assign uio_oe  [3]    = 1'b0;
+    assign uio_out [3]    = 1'b0;
+    assign mic_sd         = uio_in [3];
+
+    assign uio_oe  [4]    = 1'b1;
+    assign uio_out [4]    = sticky_failure;
+
+    assign uio_oe  [5]    = tm1638_dio_out_en;
+    assign uio_out [5]    = tm1638_dio_out;
+    assign tm1638_dio_in  = uio_in [5];
 
     assign uio_oe  [7:6]  = '1;
 
-    assign tm1638_dio_in  = uio_in [5];
-    assign uio_out [5]    = tm1638_dio_out;
-    assign uio_oe  [5]    = tm1638_dio_out_en;
-
-    assign uio_out [4]    = sticky_failure;
-    assign uio_oe  [4]    = '1;
-
-    assign uio_out [3:0]  = '0;
-    assign uio_oe  [3:0]  = '0;
+    assign uio_out [6]    = tm1638_clk;
+    assign uio_out [7]    = tm1638_stb;
 
     //------------------------------------------------------------------------
 
@@ -77,6 +97,6 @@ module tt_um_verilog_meetup_template_project_TODO
     //------------------------------------------------------------------------
 
     // List all unused inputs to prevent warnings
-    wire _unused = & { ena, ui_in, uio_in [7:6], uio_in [4:0], 1'b0 };
+    wire _unused = & { ena, uio_in [7:6], uio_in [4], uio_in [2:0], 1'b0 };
 
 endmodule
