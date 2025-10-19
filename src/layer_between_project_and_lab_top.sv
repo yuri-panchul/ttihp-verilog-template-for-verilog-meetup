@@ -16,10 +16,7 @@ module layer_between_project_and_lab_top
 
               w_red         = 2,
               w_green       = 2,
-              w_blue        = 2;
-
-              screen_width  = 640,
-              screen_height = 480,
+              w_blue        = 2,
 
               w_x           = $clog2 ( screen_width  ),
               w_y           = $clog2 ( screen_height )
@@ -82,7 +79,6 @@ module layer_between_project_and_lab_top
     wire [         23:0] mic;
     wire [         15:0] sound;
 
-    wire                 uart_rx;
     wire                 uart_tx;
 
     // General-purpose Input/Output

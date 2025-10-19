@@ -25,7 +25,6 @@ project:
     - "project.v"
     - "project.vlt"
     - "seven_segment_display.sv"
-    - "strobe_gen.sv"
     - "swap_bits.svh"
     - "tm1638_board.sv"
     - "tm1638_registers.sv"
