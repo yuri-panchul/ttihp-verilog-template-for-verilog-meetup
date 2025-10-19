@@ -178,9 +178,9 @@ module tm1638_board_controller
     // controller FSM
 
     `ifdef NO_RESET_SYNCHRONIZER
-    always @(posedge clk or posedge reset_syn2)
-    `else
     always @(posedge clk)
+    `else
+    always @(posedge clk or posedge reset_syn2)
     `endif
     begin
         if (reset_syn2) begin
